@@ -4,6 +4,7 @@ Rails.application.routes.draw do
 
   resources :channels do
     resource :channel_user
+    resources :messages
   end
 
 end

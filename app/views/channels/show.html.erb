@@ -1,4 +1,4 @@
-<div class="row">
+<div class="row" data-controller="channel" data-channel-id="<%= @channel.id %>">
   <div class="col-sm-2">
     <div class="d-flex justify-content-between">
       <h6>Channels</h6>
@@ -13,19 +13,24 @@
       </div>
     <% end %>
     <hr />
-    <div class="d-flex justify-content-between">
-      <h6>User</h6>
-    </div>
-    <% @channel.users.each do |user| %>
-      <div>
-        <%= user.email %>
-      </div>
-    <% end %>
+<div class="d-flex justify-content-between">
+  <h6>User</h6>
+</div>
+<% @channel.users.each do |user| %>
+  <div>
+    <%= user.email %>
   </div>
-  <div class="col-sm-10">
-    <% if current_user.channels.include?(@channel) %>
-    <% else %>
-      <%= link_to "Join #{@channel.name}", channel_channel_user_path(@channel), method: :post  %>
+<% end %>
+</div>
+<div class="col-sm-10">
+  <%= render @channel.messages %>
+  <!-- vai render a partial que esta dentro da messages -->
+  <% if current_user.channels.include?(@channel) %>
+    <%= form_with model: [@channel, Message.new] do |form|%>
+      <%= form.text_field :body, class: "form-control" %>
     <% end %>
-  </div>
+  <% else %>
+    <%= link_to "Join #{@channel.name}", channel_channel_user_path(@channel), method: :post  %>
+  <% end %>
+</div>
 </div>
