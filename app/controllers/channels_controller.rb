@@ -1,6 +1,6 @@
 class ChannelsController < ApplicationController
   before_action :authenticate_user!, except: [:index]
-  before_action :set_channel, only: %i[ show edit update destroy ]
+  before_action :set_channel, only: [:show, :edit, :update, :destroy]
 
   # GET /channels or /channels.json
   def index
@@ -9,6 +9,9 @@ class ChannelsController < ApplicationController
 
   # GET /channels/1 or /channels/1.json
   def show
+    @channel_user = current_user.channel_users.find_by(channel: @channel)
+    @last_read_at = @channel_user&.last_read_at || @channel.created_at
+    @channel_user&.touch(:last_read_at)
   end
 
   # GET /channels/new
